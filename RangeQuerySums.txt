@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct SegmentTree{
+    vector<int>segTree;
+    SegmentTree(int x){
+        segTree.resize(4*x+1);
+    }
+    void buildTree(int low,int high,int ind,std::vector<int> &arr){
+        if(low==high){
+            segTree[ind]=arr[low];
+            return;
+        }
+        int mid=(low+high)/2;
+        buildTree(low,mid,2*ind+1,arr);
+        buildTree(mid+1,high,2*ind+2,arr);
+        segTree[ind]=segTree[2*ind+1]+segTree[2*ind+2];
+    }
+    int query(int l,int r,int low,int high,int ind){
+        if(low>=l && high<=r){
+            return segTree[ind];
+        }
+        if(low>r && high>r || low<l && high<l){
+            return 0;
+        }
+        int mid=(low+high)/2;
+        int left=query(l,r,low,mid,2*ind+1);
+        int right=query(l,r,mid+1,high,2*ind+2);
+        return segTree[ind]=left+right;
+    }
+    void update(int i,int x,int L,int R,int ind){
+        if(L>i && R>i || L<i && R<i){
+            return;
+        }
+        if(L==R && L==i){
+            segTree[ind]=x;
+            return;
+        }
+        
+        int mid=(L+R)/2;
+        update(i,x,L,mid,2*ind+1);
+        update(i,x,mid+1,R,2*ind+2);
+        segTree[ind]=segTree[2*ind+1]+segTree[2*ind+2];
+    }
+};
+int main() {
+    
+	return 0;
+}
